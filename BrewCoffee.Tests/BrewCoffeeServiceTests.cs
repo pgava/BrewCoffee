@@ -9,18 +9,35 @@ namespace BrewCoffee.Tests;
 public class BrewCoffeeServiceTests
 {
     [Fact]
-    public void Should_Be_Able_To_Make_A_Coffee()
+    public void Should_Be_Able_To_Make_A_Hot_Coffee()
     {
         var fakeTimeProvider = new FakeTimeProvider();
         fakeTimeProvider.SetUtcNow(new DateTime(2024, 1, 1));
 
-        var sut = new BrewCoffeeService(fakeTimeProvider, new CoffeeProvider());
+        var sut = new BrewCoffeeService(fakeTimeProvider, new CoffeeProvider(), new FakeWeatherProvider());
 
         var result = sut.MakeCoffee();
 
         result.Should().BeEquivalentTo(new CoffeeItem
         {
-            Message = "Your piping hot coffee is ready",
+            Message = BrewCoffeeService.HotCoffeeIsReady,
+            Prepared = "2024-01-01T00:00:00.0000000+11:00"
+        });
+    }
+
+    [Fact]
+    public void Should_Be_Able_To_Make_A_Iced_Coffee()
+    {
+        var fakeTimeProvider = new FakeTimeProvider();
+        fakeTimeProvider.SetUtcNow(new DateTime(2024, 1, 1));
+
+        var sut = new BrewCoffeeService(fakeTimeProvider, new CoffeeProvider(), new FakeWeatherProvider(40));
+
+        var result = sut.MakeCoffee();
+
+        result.Should().BeEquivalentTo(new CoffeeItem
+        {
+            Message = BrewCoffeeService.IcedCoffeeIsReady,
             Prepared = "2024-01-01T00:00:00.0000000+11:00"
         });
     }
@@ -31,9 +48,9 @@ public class BrewCoffeeServiceTests
         var fakeTimeProvider = new FakeTimeProvider();
         fakeTimeProvider.SetUtcNow(new DateTime(2024, 1, 1));
 
-        var sut = new BrewCoffeeService(fakeTimeProvider, new FakeCoffeeProvider());
+        var sut = new BrewCoffeeService(fakeTimeProvider, new FakeCoffeeProvider(), new FakeWeatherProvider());
 
-        Action act = () => sut.MakeCoffee();
+        Action act =  () => sut.MakeCoffee();
 
         act.Should().Throw<OutOfCoffeeException>();
     }
@@ -44,7 +61,7 @@ public class BrewCoffeeServiceTests
         var fakeTimeProvider = new FakeTimeProvider();
         fakeTimeProvider.SetUtcNow(new DateTime(2024, 4, 1));
 
-        var sut = new BrewCoffeeService(fakeTimeProvider, new CoffeeProvider());
+        var sut = new BrewCoffeeService(fakeTimeProvider, new CoffeeProvider(), new FakeWeatherProvider());
 
         Action act = () => sut.MakeCoffee();
 

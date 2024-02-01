@@ -10,6 +10,7 @@ builder.Services.AddSwaggerGen();
 
 // Add dependencies
 builder.Services.AddCoffeeServices();
+builder.Services.AddWeatherServices();
 
 var app = builder.Build();
 

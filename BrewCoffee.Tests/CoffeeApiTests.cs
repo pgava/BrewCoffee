@@ -14,7 +14,7 @@ public class CoffeeApiTests
         var fakeTimeProvider = new FakeTimeProvider();
         fakeTimeProvider.SetUtcNow(new DateTime(2024, 1, 1));
 
-        var service = new BrewCoffeeService(fakeTimeProvider, new CoffeeProvider());
+        var service = new BrewCoffeeService(fakeTimeProvider, new CoffeeProvider(), new FakeWeatherProvider());
 
         var result = CoffeeApi.MakeCoffee(service);
         var resultData = (result as Ok<CoffeeItem>)?.Value;
@@ -23,3 +23,4 @@ public class CoffeeApiTests
         resultData.Prepared.Should().Be("2024-01-01T00:00:00.0000000+11:00");
     }
 }
+
