@@ -10,6 +10,11 @@ public interface IWeatherProvider
     Task<Weather> GetWeather();
 }
 
+// This implementation need a lot more work.
+// It's just a quick example of how to use the weather API.
+// The api key and URL is hard coded and should be in a config file.
+// The lat and lon should be passed in as parameters.
+
 public class WeatherProvider : IWeatherProvider
 {
     private readonly HttpClient _httpClient;
